@@ -95,10 +95,25 @@
 #     print(' ' * (num - i - 1) + '*' * (i + 1))
 
 
-num1, num2 = map(int, input().split())
-list = []
-a = list(map(int, input().split()))
-print(a)
-# min = min(list)
-# for i in range(num2):
-#     print(i, end='') if i < min else print('')
+# num1, num2 = map(int, input().split())
+# numList = list(map(int, input().split()))
+# for i in numList:
+#     print(i, end=' ') if i < num2 else print('', end='')
+
+# while True:
+#     try:
+#         num1, num2 = map(int, input().split())
+#         print(num1 + num2)
+#     except:
+#         break
+
+inputNum = input()
+num = inputNum
+result = 0
+while True:
+    num2 = str(int(num[-1]) + int(num[-2])) if int(num) >= 10 else num
+    num = num[-1] + num2[-1]
+    result += 1
+    if(int(num) == int(inputNum)):
+        break
+print(result)
