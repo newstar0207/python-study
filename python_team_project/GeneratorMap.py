@@ -1,42 +1,28 @@
 import folium
 import osmnx as ox
 
-import math
-
 
 class GeneratorMap:
-    def __init__(self, orig, dest, time) -> None:
+    def __init__(self, time, origin, destination):
 
-        self.orig = (35.895622, 128.622427)  # 영진전문대
-
-        self.dest = (35.888851, 128.641663)  # 아양교
-
+        self.orig = (origin['lat'], origin['lng'])  # 영진전문대
+        self.dest = (origin['lat'], destination['lng'])  # 경대
         self.time = time
+        self.G = ox.graph_from_point(self.orig, 1500, network_type="walk")
 
-        self.map = folium.Map(self.orig, width="100%", height="100%")
+    def f_map_marker(self, f_map):
 
-        self.G = ox.graph_from_point(self.orig, 1000, network_type="walk")
+        folium.Marker( self.orig, 
+                      popup=folium.Popup(f"<b>origin</b>", show=True)).add_to(f_map)
+        folium.Marker( self.dest, 
+                      popup=folium.Popup(f"<b>destination</b>", show=True)).add_to(f_map)
 
-    # 1. 노드를 찾음 -> G 주변 노드에서 랜덤의 수의 노드를 가져옴
-    # 2. 최단거리 알고리즘으로 길을 생성
-    # 3. 길을 이은 후 시간 체크
+        return f_map._repr_html_()
 
-    def plot_route(self, nodes, actualRouteLength, path):
-        # Plot forward and reverse paths in different colours
-        routeMap = ox.folium.plot_route_folium(self.G, nodes, self.map)
+    def __hms(self, s):
+        hours = s // 3600
+        s = s - hours * 3600
+        mu = s // 60
+        ss = s - mu * 60
 
-        # Add marker to start point and show route length as a pop up
-        folium.Marker(
-            orig=self.orig,
-            popup=folium.Popup(
-                f"<b>Route length: {math.floor(actualRouteLength)}m</b>", show=True
-            ),
-        ).add_to(routeMap)
-        folium.Marker(
-            dest=self.dest,
-            popup=folium.Popup(
-                f"<b>Route length: {math.floor(actualRouteLength)}m</b>", show=True
-            ),
-        ).add_to(routeMap)
-
-        return routeMap._repr_html_()
+        return hours, mu, ss
