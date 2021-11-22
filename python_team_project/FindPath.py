@@ -14,7 +14,6 @@ class FindPath:
         self.orig =orig
 
     def generate_path(self):
-        # edges = ox.graph_to_gdfs(self.G, nodes=False)
 
         is_not_complete = True
         all_time = 1
@@ -24,7 +23,7 @@ class FindPath:
             f_map = folium.Map(self.orig, width="100%", height="100%")
             all_length = 0
             all_route = []
-            random_num = random.randrange(1, 3)
+            random_num = random.randrange(1, 4)
             random_node = []
 
             G_list = list(self.G.nodes)
@@ -45,6 +44,15 @@ class FindPath:
                     sum(ox.utils_graph.get_route_edge_attributes(self.G, route, "length"))
                 )
                 all_length += route_length
+                
+                
+            # 시간 계산 
+            mu = self.__cal_time(all_length * 0.9) 
+            if mu < self.time - 3 or mu > self.time + 3 :
+                all_time += 1
+                continue
+            
+                
 
             d_node = {}
             d_node.clear()
@@ -65,3 +73,15 @@ class FindPath:
                 if check_count == len(d_node.values()) - 2:
                     is_not_complete = False
         return f_map, all_length
+    
+    def hms(self, s):
+        hours = s // 3600
+        s = s - hours * 3600
+        mu = s // 60
+        ss = s - mu * 60
+        result_hms = [hours, mu, ss]
+        
+        return result_hms
+    
+    def __cal_time(self, s) :
+        return int(s // 60)

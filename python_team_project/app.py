@@ -27,9 +27,9 @@ def show_map():
     origin_geocoding, destination_geocoding = geocoding.geocoding()
     
 
-    generateMap = GeneratorMap(time, origin_geocoding, destination_geocoding)
+    generateMap = GeneratorMap(origin_geocoding, destination_geocoding)
     findPath = FindPath(
-        generateMap.G, generateMap.orig, generateMap.dest, generateMap.time
+        generateMap.G, generateMap.orig, generateMap.dest, time
     )
 
     if time < 10:
@@ -38,7 +38,8 @@ def show_map():
         try:
             f_map, all_length = findPath.generate_path()
             folium_map = generateMap.f_map_marker(f_map)
-            return render_template("map.html", folium_map=folium_map)
+            result_hms = findPath.hms(all_length * 0.9)
+            return render_template("map.html", folium_map=folium_map, result_hms = result_hms)
         except Exception as error:
             flash("error occured : " + repr(error))
     return render_template("home.html")
