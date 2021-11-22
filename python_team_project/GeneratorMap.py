@@ -6,7 +6,7 @@ class GeneratorMap:
     def __init__(self, time, origin, destination):
 
         self.orig = (origin['lat'], origin['lng'])  # 영진전문대
-        self.dest = (origin['lat'], destination['lng'])  # 경대
+        self.dest = (destination['lat'], destination['lng'])  # 경대
         self.time = time
         self.G = ox.graph_from_point(self.orig, 1500, network_type="walk")
 

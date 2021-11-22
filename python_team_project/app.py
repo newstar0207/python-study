@@ -24,10 +24,10 @@ def show_map():
     time = int(request.form["time"])
     
     geocoding  = Geocoding(orig, dest)
-    origin_geocoding, destination_geoocoding = geocoding.geocoding()
+    origin_geocoding, destination_geocoding = geocoding.geocoding()
     
 
-    generateMap = GeneratorMap(time, origin_geocoding, destination_geoocoding)
+    generateMap = GeneratorMap(time, origin_geocoding, destination_geocoding)
     findPath = FindPath(
         generateMap.G, generateMap.orig, generateMap.dest, generateMap.time
     )
