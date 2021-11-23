@@ -11,7 +11,7 @@ class FindPath:
         self.origin_node = ox.distance.nearest_nodes(graph, orig[1], orig[0])
         self.destination_node = ox.distance.nearest_nodes(graph, dest[1], dest[0])
         self.time = time
-        self.orig =orig
+        self.orig = orig
 
     def generate_path(self):
 
@@ -20,7 +20,7 @@ class FindPath:
 
         while is_not_complete:
 
-            f_map = folium.Map(self.orig, width="100%", height="100%")
+            
             all_length = 0
             all_route = []
             random_num = random.randrange(1, 4)
@@ -38,13 +38,14 @@ class FindPath:
 
             for i in range(len(random_node) - 1):
                 route = ox.shortest_path(self.G, random_node[i], random_node[i + 1], weight="length")
-                f_map = ox.folium.plot_route_folium(self.G, route, f_map)
-                all_route.extend(route)
+                all_route.extend(route[:-1])
                 route_length = int(
                     sum(ox.utils_graph.get_route_edge_attributes(self.G, route, "length"))
                 )
                 all_length += route_length
-                
+            
+            all_route.append(self.destination_node)    
+            
                 
             # 시간 계산 
             mu = self.__cal_time(all_length * 0.9) 
@@ -72,7 +73,7 @@ class FindPath:
                     break
                 if check_count == len(d_node.values()) - 2:
                     is_not_complete = False
-        return f_map, all_length
+        return all_route, all_length
     
     def hms(self, s):
         hours = s // 3600

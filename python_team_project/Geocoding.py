@@ -1,7 +1,7 @@
 import googlemaps
 import os
 
-class Geocoding :
+class Geocoding:
     def __init__(self, orig, dest ) :
         self.orig = orig
         self.dest = dest

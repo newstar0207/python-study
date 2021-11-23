@@ -1,10 +1,10 @@
 {% extends 'layout.html' %}
 
 {% block body%}
-  <form method="post" action='/show_map'>
-    <input type="" name="orig" placeholder="출발지" required="" autofocus="" style="width: 100%; margin-top: 10px;">
-    <input type="" name="dest" placeholder="목적지" required="" autofocus="" style="width: 100%; margin-top: 10px;">
-    <input type="" name="time" placeholder="분(숫자만)" required="" autofocus="" style="width: 100%; margin-top: 10px;">
+  <form action="/show_map" method="post">
+    <input id="orig" name="orig" placeholder="출발지" required="" autofocus="" style="width: 100%; margin-top: 10px;">
+    <input id="dest" type="" name="dest" placeholder="목적지" required="" autofocus="" style="width: 100%; margin-top: 10px;">
+    <input id="duration" type="" name="duration" placeholder="분(숫자만)" required="" autofocus="" style="width: 100%; margin-top: 10px;">
     <button class="btn btn-lg btn-primary btn-block" type="submit" style="width: 100%; margin-top: 10px;">Start</button><br>
   </form>
 {% endblock %}

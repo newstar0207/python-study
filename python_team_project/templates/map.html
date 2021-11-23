@@ -1,6 +1,68 @@
 {% extends 'home.html' %}
 
 {% block content %}
+
   <h6>{{ result_hms[0] }}시간 {{ result_hms[1] }}분 {{ result_hms[2] }}초 입니다.</h6>  
-  <iframe srcdoc="{{ folium_map }}" style="width: 100%; height:100%; justify-content: center;"> </iframe>
+  <div class="">
+    <iframe srcdoc="{{ folium_map }}" style="border:none; width: 100%; height:100%; justify-content: center;"> </iframe>
+    <button id="select_btn" onclick="select_btn()" class="btn btn-lg btn-primary btn-block" style="width: 100%; margin-top: 10px;">select</button>
+    <button id="retry_btn" onclick="retry_btn()" class="btn btn-lg btn-primary btn-block" style="width: 100%; margin-top: 10px;">retry</button>
+  </div>
+
+  <script>
+
+    const orig = '{{ orig }}'
+    const dest = '{{ dest }}'
+    const duration = '{{  duration }}'
+    const all_route = '{{  all_route }}'
+    const result_hms = '{{ result_hms }}'
+    const folium_map = '{{ folium_map }}'
+    
+    function select_btn() {
+      
+      console.log('select ok...')
+      axios.post('/learning', {
+        'orig' : orig,
+        'dest' : dest,
+        'duration' : duration,
+        'all_route' : all_route,
+      }).then(() => {
+        console.log('learning ok...')
+      }).catch(error => {
+        console.error('error')
+      })
+      }
+
+    function retry_btn() {
+      params = {orig : orig, dest : dest, duration : duration}
+
+      const form = document.createElement('form')
+      form.method = 'post'
+      form.action = '/show_map'
+
+      for(const key in params) {
+        const hiddenField = document.createElement('input')
+        hiddenField.type = 'hidden'
+        hiddenField.name = key
+        hiddenField.value = params[key]
+
+        form.appendChild(hiddenField)
+      }
+      document.body.appendChild(form)
+      form.submit()
+      
+    }
+
+    
+    
+
+    
+  </script>
 {% endblock %}
+
+
+
+<!-- 
+  1. 처음으로 실행했을때 필요한 요소
+  2. 어느정도 학습이 된 후에 길을 찾을때 함수
+ -->

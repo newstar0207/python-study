@@ -21,29 +21,44 @@ def home():
 def show_map():
     orig = str(request.form["orig"])
     dest = str(request.form["dest"])
-    time = int(request.form["time"])
+    duration = int(request.form["duration"])
     
     geocoding  = Geocoding(orig, dest)
     origin_geocoding, destination_geocoding = geocoding.geocoding()
-    
 
     generateMap = GeneratorMap(origin_geocoding, destination_geocoding)
     findPath = FindPath(
-        generateMap.G, generateMap.orig, generateMap.dest, time
+        generateMap.G, generateMap.orig, generateMap.dest, duration
     )
 
-    if time < 10:
+    if duration < 10:
         flash("최소 20분 입니다.")
     else:
         try:
-            f_map, all_length = findPath.generate_path()
-            folium_map = generateMap.f_map_marker(f_map)
+            all_route, all_length = findPath.generate_path()
+            folium_map = generateMap.f_map_marker(all_route)
             result_hms = findPath.hms(all_length * 0.9)
-            return render_template("map.html", folium_map=folium_map, result_hms = result_hms)
+            
+            return render_template("map.html", folium_map=folium_map, result_hms = result_hms, orig = geocoding.orig, dest = geocoding.dest, duration = duration, all_route = all_route )
         except Exception as error:
             flash("error occured : " + repr(error))
     return render_template("home.html")
 
+
+@app.route('/learning',  methods=["POST"])
+def learning() :
+    params = request.get_json()
+    # flash(params)
+    orig = params['orig']
+    dest = params['dest']
+    duration = int(params['duration'])
+    all_route = list(params['all_route'])
+    # print(all_route)
+    
+    # 학습!!!
+    
+    return {}
+    
 
 if __name__ == "__main__":
     app.run(debug=True)
